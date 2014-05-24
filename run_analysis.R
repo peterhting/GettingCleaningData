@@ -43,7 +43,10 @@ act<-tolower(act)
 #read in feature names, transform to legal column names
 features       = read.table(filefeatName,header=FALSE)
 featureNames<-gsub("\\(|\\)|\\-","",features[,2])
-featureNames<-tolower(tt)
+featureNames<-tolower(featureNames)
+#replace embeded "," with "uuu"
+featureNames<-gsub(",","uuu",featureNames)
+
 
 subjectTest    = read.table(filetestsubjName)
 subjectTrain   = read.table(filesubtrainName)
