@@ -1,10 +1,10 @@
-##
+##run_analysis.R
 
 
 ##get the required libraries and packages
 ##install.packages("httr")  #http url stuff
 library(httr)
-library(reshape2)
+##library(reshape2)
 
 directory="UCI HAR Dataset"
 dlfile="getdata_projectfiles_UCI HAR Dataset.zip"
@@ -35,17 +35,19 @@ fileXtrainName=  file.path(directory,"train","X_train.txt")
 fileytrainName=  file.path(directory,"train","y_train.txt")
 filesubtrainName=file.path(directory,"train","subject_train.txt")
 
-activityLabels = read.table(fileactlabelName)
+activityLabels = read.csv(fileactlabelName,colclasses="character")
+
 features       = read.csv(filefeatName,colClasses="character")
-#features       = read.csv(filefeatName)
+
 subjectTest    = read.table(filetestsubjName)
 subjectTrain   = read.table(filesubtrainName)
 
 #xtestDB= read.table(fileXtestName)
 #ytestDB= read.table(fileytestName)
+
 xtrainDB= read.table(fileXtrainName)
 ytrainDB= read.table(fileytrainName)
-subtrainDB=read.table(fileSubtrainName)
+subtrainDB=read.table(filesubtrainName)
 
 
 #mergeDf = merge(gdpDf,eduDf,by.x="X",by.y="CountryCode")
