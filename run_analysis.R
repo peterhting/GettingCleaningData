@@ -35,19 +35,45 @@ fileXtrainName=  file.path(directory,"train","X_train.txt")
 fileytrainName=  file.path(directory,"train","y_train.txt")
 filesubtrainName=file.path(directory,"train","subject_train.txt")
 
-activityLabels = read.csv(fileactlabelName,colclasses="character")
+#read in activity labels, transform to legal column names
+activityLabels = read.table(fileactlabelName,sep=" ",header=FALSE)
+act<-gsub("_","",activityLabels[,2])
+act<-tolower(act)
 
-features       = read.csv(filefeatName,colClasses="character")
+#read in feature names, transform to legal column names
+features       = read.table(filefeatName,header=FALSE)
+featureNames<-gsub("\\(|\\)|\\-","",features[,2])
+featureNames<-tolower(tt)
 
 subjectTest    = read.table(filetestsubjName)
 subjectTrain   = read.table(filesubtrainName)
 
-#xtestDB= read.table(fileXtestName)
-#ytestDB= read.table(fileytestName)
+#read in the test and training tables,name the column with
+#cleaned feature column names
+xtestDF= read.table(fileXtestName,col.names=featureNames)
+ytestDF= read.table(fileytestName)
 
-xtrainDB= read.table(fileXtrainName)
-ytrainDB= read.table(fileytrainName)
-subtrainDB=read.table(filesubtrainName)
+xtrainDF= read.table(fileXtrainName,col.names=featureNames)
+ytrainDF= read.table(fileytrainName)
+
+#replace activity code with activity names
+ytrainActivity<-act[ytrainDB[,1]]
+#add the activity name column to the trainingDF
+trainDF<-cbind(xtrainDF,ytrainActivity)
+
+#replace activity code with activity names
+ytestActivity<-act[ytestDF[,1]]
+#add the activity name column to the trainingDF
+testDF<-cbind(xtestDF,ytestActivity)
+
+#merge the test and training data frame rows
+testtrainDF<-rbind(testDF,trainDF)
+
+#select only the column names containing mean,Mean,std
+selMeanStd<-grepl("[Mm]mean|std",featureNames)
+selDF<-testtrainDF[,selMeanStd]
+
+subjtrainDB=read.table(filesubtrainName)
 
 
 #mergeDf = merge(gdpDf,eduDf,by.x="X",by.y="CountryCode")
