@@ -61,14 +61,13 @@ ztrainDF= read.table(filesubtrainName,col.names="subject")
 
 #replace activity code with activity names
 activityl<-act[ytrainDB[,1]]
-#add the subject and activity name column to the trainingDF
-#trainDF<-cbind(ztrainDF,ytrainDF,activityl,xtrainDF)
+#add subject and activity name column to the testDF
 trainDF<-cbind(ztrainDF,activityl,xtrainDF)
 
 #replace activity code with activity names
+#note: column names must match hence reuse activityl
 activityl<-act[ytestDF[,1]]
 #add the subject and activity name column to the trainingDF
-#testDF<-cbind(ztestDF,ytestDF,activityl,xtestDF)
 testDF<-cbind(ztestDF,activityl,xtestDF)
 
 #merge the test and training data frame rows
@@ -76,6 +75,8 @@ mergeDF<-rbind(testDF,trainDF)
 
 #select only the column names containing mean,Mean,std
 selMeanStd<-grepl("[Mm]ean|std",featureNames)
+#add subjext and activity columns
+selMeanStd<-c(TRUE,TRUE,selMeanStd)
 selDF<-mergeDF[,selMeanStd]
 
 subjActDF<-melt(selDF,id=c("subject","activityl"))
@@ -83,5 +84,10 @@ subjActDF<-melt(selDF,id=c("subject","activityl"))
 tidyDF<-dcast(subjActDF,subject+activityl ~variable,
               fun.aggregate=mean, na.rm=TRUE)
 
-
 write.table(tidyDF,"tidyDF.txt")
+
+#get the names of the tidyDF for the codebook
+tnames<-names(tidyDF)
+write.csv(tnames,"Codebook.txt")
+
+
