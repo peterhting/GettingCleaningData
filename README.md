@@ -12,4 +12,5 @@
 8. use the melt function from library(reshap2) to create a table
 +of activity,subject,measurements...
 9. use dcast to compute the mean for each activity and each subject
-10.create a independent tidy data set with the average of each variable for each activity and each subject
+10. create a independent tidy dataframe
+11. create the names of the tidy dataframe for the Codebook

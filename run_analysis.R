@@ -51,6 +51,7 @@ featureNames<-gsub(",","uuu",featureNames)
 
 #read in the test and training tables,name the column with
 #cleaned feature column names
+#note:xyz here are data, activityid and subject
 xtestDF= read.table(fileXtestName,col.names=featureNames)
 ytestDF= read.table(fileytestName,col.names="activityid")
 ztestDF= read.table(fileztestName,col.names="subject")
