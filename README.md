@@ -13,4 +13,4 @@
 +of activity,subject,measurements...
 9. use dcast to compute the mean for each activity and each subject
 10. create a independent tidy dataframe
-11. create the names of the tidy dataframe for the Codebook
+11. use the describe function from package Hmisc to create a Codebook.txt

@@ -5,6 +5,7 @@
 ##install.packages("httr")  for https, reshape2 for melt
 library(httr)
 library(reshape2)
+library(Hmisc)
 
 directory="UCI HAR Dataset"
 dlfile="getdata_projectfiles_UCI HAR Dataset.zip"
@@ -87,8 +88,16 @@ tidyDF<-dcast(subjActDF,subject+activityl ~variable,
 
 write.table(tidyDF,"tidyDF.txt")
 
-#get the names of the tidyDF for the codebook
-tnames<-names(tidyDF)
-write.csv(tnames,"Codebook.txt")
+
+#creat the codebook
+#di<-describe(tidyDF)
+di<-describe(tidyDF)
+
+zz<-file("sampleCodebook.txt", open="wt")
+sink(zz)
+print(di)
+sink()
+
+
 
 
