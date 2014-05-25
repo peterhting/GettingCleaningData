@@ -62,12 +62,14 @@ ztrainDF= read.table(filesubtrainName,col.names="subject")
 #replace activity code with activity names
 activityl<-act[ytrainDB[,1]]
 #add the subject and activity name column to the trainingDF
-trainDF<-cbind(ztrainDF,ytrainDF,activityl,xtrainDF)
+#trainDF<-cbind(ztrainDF,ytrainDF,activityl,xtrainDF)
+trainDF<-cbind(ztrainDF,activityl,xtrainDF)
 
 #replace activity code with activity names
 activityl<-act[ytestDF[,1]]
 #add the subject and activity name column to the trainingDF
-testDF<-cbind(ztestDF,ytestDF,activityl,xtestDF)
+#testDF<-cbind(ztestDF,ytestDF,activityl,xtestDF)
+testDF<-cbind(ztestDF,activityl,xtestDF)
 
 #merge the test and training data frame rows
 mergeDF<-rbind(testDF,trainDF)
@@ -76,9 +78,9 @@ mergeDF<-rbind(testDF,trainDF)
 selMeanStd<-grepl("[Mm]ean|std",featureNames)
 selDF<-mergeDF[,selMeanStd]
 
-subjActDF<-melt(selDF,id=c("subject","activityid"))
+subjActDF<-melt(selDF,id=c("subject","activityl"))
 ##tidyDF<-summary(actSubjDF)
-tidyDF<-dcast(subjActDF,subject+activityid ~variable,
+tidyDF<-dcast(subjActDF,subject+activityl ~variable,
               fun.aggregate=mean, na.rm=TRUE)
 
 
