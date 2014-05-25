@@ -46,29 +46,28 @@ act<-tolower(act)
 features       = read.table(filefeatName,header=FALSE)
 featureNames<-gsub("\\(|\\)|\\-","",features[,2])
 featureNames<-tolower(featureNames)
-#replace embeded comma and period with "u1u" and "u2u"
+#replace embeded comma with "uuu"
 featureNames<-gsub(",","uuu",featureNames)
-#featureNames<-gsub(".","u2u",featureNames)
 
 #read in the test and training tables,name the column with
 #cleaned feature column names
 xtestDF= read.table(fileXtestName,col.names=featureNames)
-ytestDF= read.table(fileytestName)
+ytestDF= read.table(fileytestName,col.names="activityid")
 ztestDF= read.table(fileztestName,col.names="subject")
 
 xtrainDF= read.table(fileXtrainName,col.names=featureNames)
-ytrainDF= read.table(fileytrainName)
+ytrainDF= read.table(fileytrainName,col.names="activityid")
 ztrainDF= read.table(filesubtrainName,col.names="subject")
 
 #replace activity code with activity names
-activity<-act[ytrainDB[,1]]
+activityl<-act[ytrainDB[,1]]
 #add the subject and activity name column to the trainingDF
-trainDF<-cbind(ztrainDF,activity,xtrainDF)
+trainDF<-cbind(ztrainDF,ytrainDF,activityl,xtrainDF)
 
 #replace activity code with activity names
-activity<-act[ytestDF[,1]]
+activityl<-act[ytestDF[,1]]
 #add the subject and activity name column to the trainingDF
-testDF<-cbind(ztestDF,activity,xtestDF)
+testDF<-cbind(ztestDF,ytestDF,activityl,xtestDF)
 
 #merge the test and training data frame rows
 mergeDF<-rbind(testDF,trainDF)
@@ -77,7 +76,10 @@ mergeDF<-rbind(testDF,trainDF)
 selMeanStd<-grepl("[Mm]ean|std",featureNames)
 selDF<-mergeDF[,selMeanStd]
 
-actSubjDF<-melt(selDF,id=c("activity","subject"))
-tidyDF<-summary(actSubjDF)
+actSubjDF<-melt(selDF,id=c("subject","activityid"))
+##tidyDF<-summary(actSubjDF)
+tidyDF<-dcast(actSubjDF,subject + activityid, ~variable,
+              fun.aggregate=mean, na.rm=TRUE)
+
 
 write.table(tidyDF,"tidyDF.txt")
