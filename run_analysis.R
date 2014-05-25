@@ -76,9 +76,9 @@ mergeDF<-rbind(testDF,trainDF)
 selMeanStd<-grepl("[Mm]ean|std",featureNames)
 selDF<-mergeDF[,selMeanStd]
 
-actSubjDF<-melt(selDF,id=c("subject","activityid"))
+subjActDF<-melt(selDF,id=c("subject","activityid"))
 ##tidyDF<-summary(actSubjDF)
-tidyDF<-dcast(actSubjDF,subject + activityid, ~variable,
+tidyDF<-dcast(subjActDF,subject+activityid ~variable,
               fun.aggregate=mean, na.rm=TRUE)
 
 
