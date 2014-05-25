@@ -80,4 +80,4 @@ selDF<-mergeDF[,selMeanStd]
 actSubjDF<-melt(selDF,id=c("activity","subject"))
 tidyDF<-summary(actSubjDF)
 
-write.table(tidyDF)
+write.table(tidyDF,"tidyDF.txt")
